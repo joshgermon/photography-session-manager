@@ -7,8 +7,7 @@ export default async function Sessions() {
     next: { tags: ["sessions"] },
   });
   const allSessions = await sessionRes.json();
-  console.log(allSessions);
-  const tableData = allSessions.map((session) => ({
+  const tableData = allSessions.map((session: any) => ({
     date: session.date,
     packageName: session.sessionPackage.name,
     sessionType: session.sessionPackage.sessionType.name,

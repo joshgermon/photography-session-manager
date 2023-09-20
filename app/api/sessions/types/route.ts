@@ -1,4 +1,5 @@
 import { db } from "@/db/client";
+import { SessionType, SessionPackage } from "@/db/schema";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -7,3 +8,7 @@ export async function GET() {
   });
   return NextResponse.json(sessionTypes);
 }
+
+export type SessionTypesWithPackages = SessionType & {
+  packages: SessionPackage[];
+};

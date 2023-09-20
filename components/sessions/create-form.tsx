@@ -23,7 +23,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { SessionType } from "@/db/schema";
 import { z } from "zod";
 import {
   Form,
@@ -33,6 +32,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+import { SessionTypesWithPackages } from "@/app/api/sessions/types/route";
 
 type FormValues = {
   clientId: string;
@@ -69,7 +69,9 @@ export function SessionForm() {
     },
   });
   const [open, setOpen] = useState(false);
-  const [sessionTypes, setSessionTypes] = useState<SessionType[]>([]);
+  const [sessionTypes, setSessionTypes] = useState<SessionTypesWithPackages[]>(
+    [],
+  );
   const selectedSessionType = form.watch("sessionTypeId");
 
   async function getSessionTypes() {
@@ -180,11 +182,14 @@ export function SessionForm() {
                         <SelectTrigger id="package" className="w-full">
                           <SelectValue placeholder="Select your package" />
                         </SelectTrigger>
-                        {selectedSessionType && (
+                        {selectedSessionType && sessionTypes && (
                           <SelectContent>
                             {sessionTypes
-                              .find((type) => type.id == selectedSessionType)
-                              .packages.map((sessionPackage) => (
+                              .find(
+                                (type) =>
+                                  type.id === Number(selectedSessionType),
+                              )
+                              ?.packages.map((sessionPackage: any) => (
                                 <SelectItem
                                   key={sessionPackage.id}
                                   value={String(sessionPackage.id)}
