@@ -1,8 +1,7 @@
 import * as schema from "./schema";
-import { NodePgDatabase, drizzle } from "drizzle-orm/node-postgres";
-import { Client } from "pg";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
 
-const client = new Client();
+export const client = new Pool({ ssl: true });
 
-const connection = await client.connect();
 export const db = drizzle(client, { schema });
