@@ -3,13 +3,13 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 export type Session = {
-  id: string;
+  id: number;
   date: string;
-  duration: string;
-  location: string;
+  clientName: string;
+  sessionType?: string;
+  packageName?: string;
+  location: string | null;
 };
 
 export const columns: ColumnDef<Session>[] = [

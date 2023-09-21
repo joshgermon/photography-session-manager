@@ -1,12 +1,10 @@
 import { columns } from "@/components/clients/columns";
 import { ClientForm } from "@/components/clients/create-form";
 import { DataTable } from "@/components/ui/data-table";
+import { getClients } from "@/lib/customers";
 
 export default async function Customers() {
-  const clientRes = await fetch("http://localhost:3000/api/customers", {
-    next: { tags: ["clients"] },
-  });
-  const allClients = await clientRes.json();
+  const allClients = await getClients();
 
   return (
     <div className="w-100">
