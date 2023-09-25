@@ -5,7 +5,11 @@ import {
   SessionPackage,
   SessionType,
   session,
+  sessionPackage,
+  sessionType,
 } from "@/db/schema";
+import { useQueryClient } from "@tanstack/react-query";
+import { eq } from "drizzle-orm";
 
 export type SessionData = Session & {
   client: Client;
@@ -22,6 +26,15 @@ export async function getSessions(): Promise<SessionData[]> {
   return sessions;
 }
 
+export async function getSessionPackage(id: number) {
+  const result = await db
+    .selectDistinct()
+    .from(sessionPackage)
+    .where(eq(sessionPackage.id, id))
+    .leftJoin(sessionType, eq(sessionType.id, sessionPackage.sessionTypeId));
+  return result[0];
+}
+
 export async function createSession(newSession: any) {
   delete newSession.sessionTypeId;
   console.log(newSession);
@@ -31,3 +44,5 @@ export async function createSession(newSession: any) {
     .returning({ id: session.id });
   return newSessionId;
 }
+
+export async function deleteSession(id: number) {}

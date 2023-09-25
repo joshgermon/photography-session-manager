@@ -1,9 +1,17 @@
 import { db } from "@/db/client";
 import { client } from "@/db/schema";
-import { ilike, or } from "drizzle-orm";
+import { eq, ilike, or } from "drizzle-orm";
 
 const DEFAULT_PAGE_LIMIT = 50;
 const DEFAULT_FILTER_LIMIT = 10;
+
+export async function getCustomer(id: number) {
+  const customer = await db
+    .selectDistinct()
+    .from(client)
+    .where(eq(client.id, id));
+  return customer[0];
+}
 
 export async function getClients(filter?: { name?: string; limit?: number }) {
   const nameFilter = filter?.name;

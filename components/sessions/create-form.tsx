@@ -33,6 +33,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { SessionTypesWithPackages } from "@/app/api/sessions/types/route";
+import { useQueryClient } from "@tanstack/react-query";
 
 type FormValues = {
   clientId: string;
@@ -58,6 +59,7 @@ const formSchema = z.object({
 });
 
 export function SessionForm() {
+  const queryClient = useQueryClient();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -90,6 +92,7 @@ export function SessionForm() {
     });
     if (createSession.ok) {
       setOpen(false);
+      queryClient.invalidateQueries({ queryKey: ["sessions"] });
     }
   }
 

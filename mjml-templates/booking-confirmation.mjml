@@ -1,0 +1,111 @@
+<mjml>
+  <mj-head>
+    <mj-title>Your Booking Confirmation - Angela and Josh Photography</mj-title>
+    <mj-preview>Your Booking Confirmation</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"></mj-all>
+      <mj-text font-weight="400" font-size="16px" color="#000000" line-height="24px" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"></mj-text>
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#ffffff" width="600px">
+    <mj-wrapper padding-top="0" padding-bottom="0" css-class="body-section" border="solid 1px #dcdcdc">
+      <mj-section background-color="#f7f7f7" padding="16px">
+        <mj-column width="66%">
+          <mj-text padding="0" font-weight="bold" font-size="12px" color="#464646">YOUR BOOKING REFERENCE</mj-text>
+          <mj-text padding="0" font-size="14px"># 1233322</mj-text>
+        </mj-column>
+        <mj-column width="33%">
+        </mj-column>
+      </mj-section>
+      <mj-section padding="0">
+        <mj-column width="100%">
+          <mj-image src="https://angela-josh-public-assets.s3.ap-southeast-2.amazonaws.com/email-assets/email-banner-booking-confirmation-1.jpg" width="600px" padding="0"></mj-image>
+        </mj-column>
+      </mj-section>
+      <mj-section padding="21px">
+        <mj-column width="100%">
+          <mj-image src="https://angela-josh-public-assets.s3.ap-southeast-2.amazonaws.com/logo-alt-650w.png" alt="" align="center" width="80px" padding-bottom="32px" padding-top="24px" />
+          <mj-text font-size="32px" font-weight="bold" align="center" color="#212121" letter-spacing="-1px" line-height="1">You're All Booked In.</mj-text>
+          <mj-text color="#747474" align="center">Congratulations! Your session is booked in and confirmed and we will be in touch leading up to your session.</mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-section padding="15px" border-top="solid 1px #dcdcdc" border-bottom="solid 1px #dcdcdc">
+        <mj-column width="100%" padding-top="15px">
+          <mj-text font-size="16px" font-weight="bold" color="#212121" line-height="1.2" padding-bottom="0">
+            Session Date
+          </mj-text>
+          <mj-text color="#747474">
+            {{ sessionDate }}
+          </mj-text>
+        </mj-column>
+        <mj-column width="50%" padding-top="0px">
+          <mj-text font-size="16px" font-weight="bold" color="#212121" line-height="1.2" padding-bottom="0">
+            Location
+          </mj-text>
+          <mj-text color="#747474">
+            {{ sessionLocation }}
+          </mj-text>
+        </mj-column>
+        <mj-column width="50%" padding-top="0px">
+          <mj-text font-size="16px" font-weight="bold" color="#212121" line-height="1.2" padding-bottom="0">
+            Package
+          </mj-text>
+          <mj-text color="#747474">
+            {{ sessionPackage }}
+          </mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-section padding-left="15px" padding-right="15px">
+        <mj-column width="100%" padding-top="15px">
+          <mj-text font-size="21px" font-weight="bold" color="#2f2019" line-height="1.2">
+            Pre-Session Form
+          </mj-text>
+          <mj-text color="#747474">
+            Please fill out the attached form below whenever you have the chance, so we can get the most out of our session together! (Mainly just so I know everyone's names).
+          </mj-text>
+          <mj-button href="https://forms.gle/GdA2hjxHoAW75HXRA" color="#464646" width="100%" background-color="#ffffff" font-size="16px" border-radius="2px" font-weight="600" border="solid 1px #464646" inner-padding="14px">
+            Fill out form
+          </mj-button>
+        </mj-column>
+      </mj-section>
+      <mj-section padding-left="15px" padding-right="15px" border-top="solid 1px #dcdcdc">
+        <mj-column width="100%" padding-top="15px">
+          <mj-text font-size="21px" font-weight="bold" color="#212121" line-height="1.2">
+            Frequently Asked Questions
+          </mj-text>
+          <mj-text font-size="16px" font-weight="bold" color="#464646" line-height="1.2" padding-bottom="0px">
+            I need to make a change to my booking, how can I do this?
+          </mj-text>
+          <mj-text color="#747474">
+            Please fill out the attached form below whenever you have the chance, so we can get the most out of our session together! (Mainly just so I know everyone's names).
+          </mj-text>
+          <mj-text font-size="16px" font-weight="bold" color="#464646" line-height="1.2" padding-bottom="0px">
+            I'm not sure what to wear, can you help me decide?
+          </mj-text>
+          <mj-text color="#747474">
+            Please fill out the attached form below whenever you have the chance, so we can get the most out of our session together! (Mainly just so I know everyone's names).
+          </mj-text>
+          <mj-text font-size="16px" font-weight="bold" color="#464646" line-height="1.2" padding-bottom="0px">
+            What happens if the weather is bad on the day?
+          </mj-text>
+          <mj-text color="#747474">
+            Please fill out the attached form below whenever you have the chance, so we can get the most out of our session together! (Mainly just so I know everyone's names).
+          </mj-text>
+        </mj-column>
+      </mj-section>
+    </mj-wrapper>
+    <mj-wrapper background-color="#f7f7f7" border="solid 1px #dcdcdc" border-top="none" padding="0">
+      <mj-section padding="21px">
+        <mj-column width="100%" padding="0">
+          <mj-text color="#464646" font-size="11px" align="center" line-height="16px" padding="0" padding-bottom="12px">
+            Please contact us if you have any questions.
+          </mj-text>
+          <mj-text color="#464646" font-size="11px" align="center" line-height="16px" padding="0" padding-bottom="6px">
+            &copy; Angela and Josh Photography
+          </mj-text>
+        </mj-column>
+      </mj-section>
+    </mj-wrapper>
+  </mj-body>
+</mjml>
+

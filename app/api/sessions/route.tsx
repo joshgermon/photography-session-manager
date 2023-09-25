@@ -1,6 +1,6 @@
 import { db } from "@/db/client";
 import { session } from "@/db/schema";
-import { revalidateTag } from "next/cache";
+import { sendBookingConfirmationEmail } from "@/lib/notifier";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -16,11 +16,12 @@ export async function GET() {
 export async function POST(request: Request) {
   const newSession = await request.json();
   delete newSession.sessionTypeId;
-  console.log(newSession);
   const newSessionId = await db
     .insert(session)
     .values(newSession)
     .returning({ id: session.id });
-  revalidateTag("sessions");
+
+  // sendBookingConfirmationEmail(newSession);
+
   return NextResponse.json(newSessionId);
 }

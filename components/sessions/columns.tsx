@@ -2,6 +2,8 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
+import { DeleteIcon } from "lucide-react";
+import { DeleteButton } from "./delete-button";
 
 export type Session = {
   id: number;
@@ -49,5 +51,10 @@ export const columns: ColumnDef<Session>[] = [
   {
     accessorKey: "date",
     header: "Session Date",
+  },
+  {
+    id: "delete",
+    header: "Delete",
+    cell: ({ row }) => <DeleteButton id={row.original.id} />,
   },
 ];
