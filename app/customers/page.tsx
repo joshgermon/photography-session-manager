@@ -1,25 +1,40 @@
+"use client";
+
 import { columns } from "@/components/clients/columns";
 import { ClientForm } from "@/components/clients/create-form";
 import { DataTable } from "@/components/ui/data-table";
-import { getClients } from "@/lib/customers";
+import { useQuery } from "@tanstack/react-query";
 
-export default async function Customers() {
-  const allClients = await getClients();
+async function getCustomers() {
+    const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/customers`,
+    );
+    const data = await res.json();
+    console.log(data);
+    return data;
+}
 
-  return (
-    <div className="w-100">
-      <div className="mb-6">
-        <h2 className="text-2xl font-semibold mb-1">Manage your Clients</h2>
-        <p className="text-gray-500">
-          This is your home dashboard where you can manage everything.
-        </p>
-      </div>
-      <DataTable
-        columns={columns}
-        data={allClients}
-        searchColumn="name"
-        headerItems={<ClientForm />}
-      />
-    </div>
-  );
+export default function Customers() {
+    const query = useQuery({ queryKey: ["customers"], queryFn: getCustomers });
+    console.log(query.data);
+    if (query.isLoading) return "Loading...";
+    if (query.error) return "An error has occurred: " + query.error.message;
+    const allCustomers = query.data;
+
+    return (
+        <div className="w-100">
+            <div className="mb-6">
+                <h2 className="text-2xl font-semibold mb-1">Manage your Clients</h2>
+                <p className="text-gray-500">
+                    This is your home dashboard where you can manage everything.
+                </p>
+            </div>
+            <DataTable
+                columns={columns}
+                data={allCustomers}
+                searchColumn="name"
+                headerItems={<ClientForm />}
+            />
+        </div>
+    );
 }
