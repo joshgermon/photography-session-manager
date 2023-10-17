@@ -15,6 +15,11 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
+FROM base AS development
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN yarn dev
 
 # Rebuild the source code only when needed
 FROM base AS builder

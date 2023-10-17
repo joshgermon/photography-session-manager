@@ -6,7 +6,7 @@ GORUN = $(GOCMD) run
 GOGET = $(GOCMD) get
 
 # Binary output name
-BINARY_NAME = captura-books-go
+BINARY_NAME = captura-books-api
 
 # Build the binary
 build:
