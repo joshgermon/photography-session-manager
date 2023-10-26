@@ -20,7 +20,7 @@ type Offering struct {
 
 type OfferingPackage struct {
 	Id                int       `json:"id"`
-	Name              string    `json:"Name"`
+	Name              string    `json:"name"`
 	DurationInMinutes int       `json:"durationInMinutes"`
 	Price             float64   `json:"price"`
 	CreatedAt         time.Time `json:"createdAt"`

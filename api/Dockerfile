@@ -1,6 +1,7 @@
 # Use the official Go image as a parent image
 FROM golang:1.21
 
+
 # Set the working directory inside the container
 WORKDIR /app
 
@@ -11,12 +12,9 @@ RUN go mod download
 # Copy the rest of your application source code
 COPY . .
 
-# Build the Go application
-RUN make build
-
 # Expose the port that your application will listen on
 EXPOSE 3333
 
 # Command to run your application
-CMD ["./captura-books-api"]
+CMD ["make", "run"]
 

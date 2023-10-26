@@ -11,11 +11,23 @@ import (
 )
 
 func (a *api) GetCustomers(w http.ResponseWriter, r *http.Request) {
-	customers, err := a.customerRepo.Get(context.Background())
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+  searchQuery := r.URL.Query().Get("search")
+    var customers []repository.Customer
+    var err error
+
+    if searchQuery != "" {
+        customers, err = a.customerRepo.SearchByName(context.Background(), searchQuery)
+        if err != nil {
+            http.Error(w, err.Error(), http.StatusInternalServerError)
+            return
+        }
+    } else {
+        customers, err = a.customerRepo.Get(context.Background())
+        if err != nil {
+            http.Error(w, err.Error(), http.StatusInternalServerError)
+            return
+        }
+    }
 
 	jsonBytes, err := json.Marshal(customers)
 	if err != nil {

@@ -64,6 +64,35 @@ func (c *customerRepository) Get (ctx context.Context) ([]Customer, error) {
     return customers, nil
 }
 
+func (c *customerRepository) SearchByName(ctx context.Context, nameQuery string) ([]Customer, error) {
+    rows, err := c.db.Query(ctx,
+		`SELECT client_id, first_name, last_name,email_address, mobile_number
+         FROM client
+         WHERE first_name ILIKE $1 OR last_name ILIKE $1
+         LIMIT 5`,
+        "%"+nameQuery+"%")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var customers []Customer
+	for rows.Next() {
+		var customer Customer
+		err := rows.Scan(&customer.Id, &customer.FirstName, &customer.LastName,
+			&customer.EmailAddress, &customer.MobileNo)
+
+		if err != nil {
+			return nil, err
+		}
+		customers = append(customers, customer)
+	}
+    if err != nil {
+        return nil, err
+    }
+    return customers, nil
+}
+
 func (c *customerRepository) GetByID (ctx context.Context, id int) (Customer, error) {
     row, err := c.db.Query(ctx,
 		`SELECT client_id, first_name, last_name,email_address, mobile_number
@@ -116,6 +145,7 @@ func (c *customerRepository) GetByEmail (ctx context.Context, email string) (Cus
 
 type CustomerRepository interface {
     Get(ctx context.Context) ([]Customer, error)
+    SearchByName(ctx context.Context, nameQuery string) ([]Customer, error)
     GetByID(ctx context.Context, id int) (Customer, error)
     GetByEmail(ctx context.Context, email string) (Customer, error)
     Create(ctx context.Context, customer *NewCustomer) (error)

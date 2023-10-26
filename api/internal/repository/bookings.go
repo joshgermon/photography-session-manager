@@ -38,7 +38,7 @@ type NewBooking struct {
 	Date             time.Time `json:"date"`
 	Location         string    `json:"location"`
 	CustomerID       int       `json:"customerId"`
-	SessionPackageId string    `json:"sessionPackageId"`
+	SessionPackageId int       `json:"sessionPackageId"`
 }
 
 func NewBookingRepository(db *pgxpool.Pool) *bookingRepository {
@@ -159,7 +159,7 @@ func (b *bookingRepository) GetByID(ctx context.Context, id int) (BookingDetails
 func (b *bookingRepository) Create(ctx context.Context, booking *NewBooking) error {
 	_, err := b.db.Exec(ctx, `
         INSERT INTO client_session
-            (date, location, client_id, session_package_id)
+            (session_date, location, client_id, session_package_id)
         VALUES ($1, $2, $3, $4)`,
 		booking.Date, booking.Location, booking.CustomerID, booking.SessionPackageId)
 	return err
