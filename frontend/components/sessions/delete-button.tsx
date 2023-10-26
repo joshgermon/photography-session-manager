@@ -1,13 +1,18 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { DeleteIcon } from "lucide-react";
+import { TrashIcon } from "lucide-react";
 
 export function DeleteButton(props: { id: number }) {
   const queryClient = useQueryClient();
 
   return (
-    <DeleteIcon
+    <TrashIcon
+      color="#9e9e9e"
+      size={18}
       onClick={async () => {
-        await fetch(`/api/sessions/${props.id}`, { method: "DELETE" });
+        await fetch(
+          `${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/sessions/${props.id}`,
+          { method: "DELETE" },
+        );
         queryClient.invalidateQueries({ queryKey: ["sessions"] });
       }}
     />

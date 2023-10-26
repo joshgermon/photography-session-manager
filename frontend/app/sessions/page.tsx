@@ -1,12 +1,22 @@
+"use client";
+
 import { columns } from "@/components/sessions/columns";
 import { SessionForm } from "@/components/sessions/create-form";
 import { DataTable } from "@/components/ui/data-table";
+import { useQuery } from "@tanstack/react-query";
 
-export default async function Sessions() {
+async function getSessions() {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/bookings`,
   );
-  const bookings = await res.json();
+  const data = await res.json();
+  return data;
+}
+
+export default function Sessions() {
+  const query = useQuery({ queryKey: ["sessions"], queryFn: getSessions });
+  if (query.isLoading) return "Loading...";
+  if (query.error) return "An error has occurred: " + query.error.message;
 
   return (
     <div className="w-100">
@@ -18,7 +28,7 @@ export default async function Sessions() {
       </div>
       <DataTable
         columns={columns}
-        data={bookings}
+        data={query.data}
         headerItems={<SessionForm />}
       />
     </div>

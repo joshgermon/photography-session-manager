@@ -1,12 +1,23 @@
+"use client";
+
 import { columns } from "@/components/clients/columns";
 import { ClientForm } from "@/components/clients/create-form";
 import { DataTable } from "@/components/ui/data-table";
+import { useQuery } from "@tanstack/react-query";
 
-export default async function Customers() {
+async function getCustomers() {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/customers`,
   );
-  const allCustomers = await res.json();
+  const data = await res.json();
+  return data;
+}
+
+export default function Customers() {
+  const query = useQuery({ queryKey: ["customers"], queryFn: getCustomers });
+  if (query.isLoading) return "Loading...";
+  if (query.error) return "An error has occurred: " + query.error.message;
+  const allCustomers = query.data;
 
   return (
     <div className="w-100">
