@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/joshgermon/captura-books-go/internal/repository"
@@ -12,7 +13,10 @@ import (
 
 
 func (a *api) GetBookings(w http.ResponseWriter, r *http.Request) {
+    start := time.Now()
+    a.logger.Info("Getting all bookings")
     bookings, err := a.bookingRepo.GetAll(context.Background())
+    a.logger.Info("Time for getting bookings", "time", time.Since(start))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

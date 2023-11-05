@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -46,6 +47,7 @@ func NewBookingRepository(db *pgxpool.Pool) *bookingRepository {
 }
 
 func (b *bookingRepository) GetAll(ctx context.Context) ([]BookingDetails, error) {
+    start := time.Now()
 	rows, err := b.db.Query(ctx, `
         SELECT
             s.session_id,
@@ -76,6 +78,9 @@ func (b *bookingRepository) GetAll(ctx context.Context) ([]BookingDetails, error
 	if err != nil {
 		return []BookingDetails{}, err
 	}
+    querytime := time.Since(start)
+    fmt.Printf("Query took - %s\n", querytime)
+    scanstart := time.Now()
 	defer rows.Close()
 
 	var bookings []BookingDetails
@@ -98,6 +103,8 @@ func (b *bookingRepository) GetAll(ctx context.Context) ([]BookingDetails, error
 
 		bookings = append(bookings, response)
 	}
+    scantime := time.Since(scanstart)
+    fmt.Printf("Struct scan took - %s\n", scantime)
 	return bookings, nil
 }
 
