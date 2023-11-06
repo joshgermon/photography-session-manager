@@ -4,11 +4,11 @@ import (
 	"context"
 	"time"
 
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jackc/pgx/v5"
 )
 
 type offeringRepository struct {
-	db *pgxpool.Pool
+	db *pgx.Conn
 }
 
 type Offering struct {
@@ -31,7 +31,7 @@ type OfferingWithPackages struct {
 	Packages []*OfferingPackage `json:"packages"`
 }
 
-func NewOfferingRepository(db *pgxpool.Pool) *offeringRepository {
+func NewOfferingRepository(db *pgx.Conn) *offeringRepository {
 	return &offeringRepository{db: db}
 }
 

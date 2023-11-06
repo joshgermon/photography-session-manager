@@ -5,11 +5,11 @@ import (
     "fmt"
     "time"
 
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jackc/pgx/v5"
 )
 
 type customerRepository struct {
-    db *pgxpool.Pool
+    db *pgx.Conn
 }
 
 type Customer struct {
@@ -28,7 +28,7 @@ type NewCustomer struct {
 	MobileNo     *string   `json:"mobileNo,omitempty"`
 }
 
-func NewCustomerRepository(db *pgxpool.Pool) *customerRepository {
+func NewCustomerRepository(db *pgx.Conn) *customerRepository {
     return &customerRepository { db: db }
 }
 

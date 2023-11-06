@@ -3,3 +3,4 @@ api/tmp
 api/.env
 api/captura-books-api
 api/.aws-sam
+.aws-sam

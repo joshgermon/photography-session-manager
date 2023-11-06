@@ -3,32 +3,30 @@ package api
 import (
 	"context"
 	"log/slog"
+	"net/http"
 
+	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
-	"github.com/go-chi/jwtauth/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jackc/pgx/v5"
 	"github.com/joshgermon/captura-books-go/internal/repository"
 )
 
 type api struct {
 	logger *slog.Logger
-	secret string
 
 	customerRepo repository.CustomerRepository
 	bookingRepo  repository.BookingRepository
 	offeringRepo repository.OfferingRepository
 }
 
-func NewAPI(ctx context.Context, logger *slog.Logger, pool *pgxpool.Pool, secret string) *api {
-	customerRepo := repository.NewCustomerRepository(pool)
-	bookingRepo := repository.NewBookingRepository(pool)
-	offeringRepo := repository.NewOfferingRepository(pool)
+func NewAPI(ctx context.Context, logger *slog.Logger, db *pgx.Conn) *api {
+	customerRepo := repository.NewCustomerRepository(db)
+	bookingRepo := repository.NewBookingRepository(db)
+	offeringRepo := repository.NewOfferingRepository(db)
 
 	return &api{
 		logger: logger,
-		secret: secret,
 
 		customerRepo: customerRepo,
 		bookingRepo:  bookingRepo,
@@ -39,10 +37,6 @@ func NewAPI(ctx context.Context, logger *slog.Logger, pool *pgxpool.Pool, secret
 func (a *api) Routes() *chi.Mux {
 	r := chi.NewRouter()
 
-	tokenAuth := jwtauth.New("HS256", []byte(a.secret), nil)
-
-	r.Use(jwtauth.Verifier(tokenAuth))
-	// r.Use(jwtauth.Authenticator)
 	r.Use(middleware.RequestID)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
@@ -55,6 +49,10 @@ func (a *api) Routes() *chi.Mux {
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
 
+	r.Get("/", func (w http.ResponseWriter, r *http.Request) {
+        w.WriteHeader(http.StatusOK)
+        w.Write([]byte("Let's SEE!"))
+    })
 	r.Get("/v1/bookings", a.GetBookings)
 	r.Get("/v1/bookings/{bookingID}", a.GetBookingByID)
 	r.Post("/v1/bookings", a.CreateBooking)

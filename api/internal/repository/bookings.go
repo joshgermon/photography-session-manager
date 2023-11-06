@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jackc/pgx/v5"
 )
 
 type bookingRepository struct {
-	db *pgxpool.Pool
+	db *pgx.Conn
 }
 
 type Booking struct {
@@ -42,7 +42,7 @@ type NewBooking struct {
 	SessionPackageId int       `json:"sessionPackageId"`
 }
 
-func NewBookingRepository(db *pgxpool.Pool) *bookingRepository {
+func NewBookingRepository(db *pgx.Conn) *bookingRepository {
 	return &bookingRepository{db: db}
 }
 
