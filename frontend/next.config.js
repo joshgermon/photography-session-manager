@@ -2,7 +2,6 @@
 module.exports = {
   output: "standalone",
   experimental: {
-    serverActions: true,
     serverComponentsExternalPackages: ["mjml"],
   },
 };
