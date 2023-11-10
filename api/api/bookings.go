@@ -2,23 +2,26 @@ package api
 
 import (
 	"context"
+	"database/sql"
 	"encoding/json"
 	"net/http"
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/joshgermon/captura-books-go/internal/repository"
+	"github.com/joshgermon/captura-books-go/repository"
 )
 
-
-func (a *api) GetBookings(w http.ResponseWriter, r *http.Request) {
-    bookings, err := a.bookingRepo.GetAll(context.Background())
+func (s *server) GetBookings(w http.ResponseWriter, r *http.Request) {
+	bookings, err := s.bookingRepo.GetAll(context.Background())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	jsonBytes, err := json.Marshal(bookings)
+	jsonBytes, err := json.Marshal(SuccessResponse{
+		Data: bookings,
+	})
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -28,17 +31,24 @@ func (a *api) GetBookings(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonBytes)
 }
 
-func (a *api) GetBookingByID (w http.ResponseWriter, r *http.Request) {
+func (s *server) GetBookingByID(w http.ResponseWriter, r *http.Request) {
 	bookingID := chi.URLParam(r, "bookingID")
-    id, err := strconv.Atoi(bookingID)
+	id, err := strconv.Atoi(bookingID)
 
-    bookings, err := a.bookingRepo.GetByID(context.Background(), id)
+	booking, err := s.bookingRepo.GetByID(context.Background(), id)
 	if err != nil {
+        if err == sql.ErrNoRows {
+            http.Error(w, "", http.StatusNotFound)
+            return
+        }
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	jsonBytes, err := json.Marshal(bookings)
+	jsonBytes, err := json.Marshal(SuccessResponse{
+		Data: booking,
+	})
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -48,7 +58,7 @@ func (a *api) GetBookingByID (w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonBytes)
 }
 
-func (a *api) CreateBooking (w http.ResponseWriter, r *http.Request) {
+func (s *server) CreateBooking(w http.ResponseWriter, r *http.Request) {
 	var booking repository.NewBooking
 
 	err := json.NewDecoder(r.Body).Decode(&booking)
@@ -57,7 +67,7 @@ func (a *api) CreateBooking (w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	a.bookingRepo.Create(context.Background(), &booking)
+	s.bookingRepo.Create(context.Background(), &booking)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

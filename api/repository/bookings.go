@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -48,8 +49,8 @@ func NewBookingRepository(db *pgxpool.Pool) *bookingRepository {
 func (b *bookingRepository) GetAll(ctx context.Context) ([]BookingDetails, error) {
 	rows, err := b.db.Query(ctx, `
         SELECT
-            s.session_id,
-            s.client_id,
+            s.booking_id,
+            s.customer_id,
             s.session_package_id,
             s.session_date,
             s.location,
@@ -64,9 +65,9 @@ func (b *bookingRepository) GetAll(ctx context.Context) ([]BookingDetails, error
             sp.duration_in_minutes,
             sp.price
         FROM
-            client_session AS s
+            booking AS s
         INNER JOIN
-            client AS c ON s.client_id = c.client_id
+            customer AS c ON s.customer_id = c.customer_id
         INNER JOIN
             session_package AS sp ON s.session_package_id = sp.session_package_id
         INNER JOIN
@@ -78,7 +79,7 @@ func (b *bookingRepository) GetAll(ctx context.Context) ([]BookingDetails, error
 	}
 	defer rows.Close()
 
-	var bookings []BookingDetails
+	bookings := []BookingDetails{}
 	for rows.Next() {
 		var booking Booking
 		var bookingPackage Package
@@ -98,14 +99,15 @@ func (b *bookingRepository) GetAll(ctx context.Context) ([]BookingDetails, error
 
 		bookings = append(bookings, response)
 	}
+	fmt.Printf("%+v\n", bookings)
 	return bookings, nil
 }
 
 func (b *bookingRepository) GetByID(ctx context.Context, id int) (BookingDetails, error) {
-	rows, err := b.db.Query(ctx, `
+	row := b.db.QueryRow(ctx, `
         SELECT
-            s.session_id,
-            s.client_id,
+            s.booking_id,
+            s.customer_id,
             s.session_package_id,
             s.session_date,
             s.location,
@@ -120,32 +122,26 @@ func (b *bookingRepository) GetByID(ctx context.Context, id int) (BookingDetails
             sp.duration_in_minutes,
             sp.price
         FROM
-            client_session AS s
+            booking AS s
         INNER JOIN
-            client AS c ON s.client_id = c.client_id
+            customer AS c ON s.customer_id = c.customer_id
         INNER JOIN
             session_package AS sp ON s.session_package_id = sp.session_package_id
         INNER JOIN
             session_type AS st ON sp.session_type_id = st.session_type_id
         WHERE
-            session_id=$1
+            booking_id=$1
         `, id)
-	if err != nil {
-		return BookingDetails{}, err
-	}
-	defer rows.Close()
 
 	var booking Booking
 	var bookingPackage Package
 	var customer Customer
 
-	if rows.Next() {
-		err := rows.Scan(&booking.Id, &customer.Id, &bookingPackage.Id, &booking.Date, &booking.Location, &booking.CreatedAt,
-			&customer.FirstName, &customer.LastName, &customer.EmailAddress, &bookingPackage.TypeId, &bookingPackage.Type,
-			&bookingPackage.TypeDescription, &bookingPackage.Name, &bookingPackage.DurationInMinutes, &bookingPackage.Price)
-		if err != nil {
-			return BookingDetails{}, err
-		}
+	err := row.Scan(&booking.Id, &customer.Id, &bookingPackage.Id, &booking.Date, &booking.Location, &booking.CreatedAt,
+		&customer.FirstName, &customer.LastName, &customer.EmailAddress, &bookingPackage.TypeId, &bookingPackage.Type,
+		&bookingPackage.TypeDescription, &bookingPackage.Name, &bookingPackage.DurationInMinutes, &bookingPackage.Price)
+	if err != nil {
+		return BookingDetails{}, err
 	}
 
 	bookingWithCustomer := BookingDetails{
@@ -158,8 +154,8 @@ func (b *bookingRepository) GetByID(ctx context.Context, id int) (BookingDetails
 
 func (b *bookingRepository) Create(ctx context.Context, booking *NewBooking) error {
 	_, err := b.db.Exec(ctx, `
-        INSERT INTO client_session
-            (session_date, location, client_id, session_package_id)
+        INSERT INTO booking
+            (session_date, location, customer_id, session_package_id)
         VALUES ($1, $2, $3, $4)`,
 		booking.Date, booking.Location, booking.CustomerID, booking.SessionPackageId)
 	return err
@@ -169,5 +165,4 @@ type BookingRepository interface {
 	Create(ctx context.Context, booking *NewBooking) error
 	GetAll(ctx context.Context) ([]BookingDetails, error)
 	GetByID(ctx context.Context, id int) (BookingDetails, error)
-	// GetByCustomerID(ctx context.Context, id int) (Booking, error)
 }
