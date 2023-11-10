@@ -1,1 +1,0 @@
-ALTER TABLE "client_session" DROP COLUMN IF EXISTS "duration";

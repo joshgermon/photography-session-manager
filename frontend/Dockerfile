@@ -16,7 +16,7 @@ FROM base AS development
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-CMD ["pnpm", "run", "dev"]
+CMD ["pnpm", "run", "dev", "--turbo"]
 
 # Rebuild the source code only when needed
 FROM base AS builder
