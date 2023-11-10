@@ -15,13 +15,12 @@ export function UpcomingSessions() {
   const query = useQuery({ queryKey: ["sessions"], queryFn: getSessions });
   if (query.isLoading) return "Loading...";
   if (query.error) return "An error has occurred: " + query.error.message;
-  console.log(query.data);
 
   return (
     <div className="">
       <h2 className="text-xl font-medium">Upcoming Sessions</h2>
       <div className="flex flex-col py-4 space-y-4">
-        {query.data.map((session) => (
+        {query.data.data.map((session) => (
           <div
             key={session.id}
             className="py-4 px-6 rounded-lg border text-card-foreground bg-white shadow-sm"

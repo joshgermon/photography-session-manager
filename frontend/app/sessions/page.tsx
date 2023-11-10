@@ -28,7 +28,7 @@ export default function Sessions() {
       </div>
       <DataTable
         columns={columns}
-        data={query.data}
+        data={query.data.data}
         headerItems={<SessionForm />}
       />
     </div>
