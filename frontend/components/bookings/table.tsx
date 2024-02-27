@@ -1,0 +1,114 @@
+"use client";
+
+import {
+  createColumnHelper,
+  getCoreRowModel,
+  useReactTable,
+  flexRender,
+} from "@tanstack/react-table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
+import { Customer } from "@/app/(dashboard)/customers/page";
+
+export type Booking = {
+  id: number;
+  date: string;
+  location: string | null;
+  createdAt: string;
+  package: Package;
+  customer: Customer;
+};
+
+type Package = {
+  id: string;
+  name: string;
+  durationInMinutes: string;
+  price: string;
+  typeId: number;
+  type: string;
+  typeDescripting: string;
+};
+
+const columnHelper = createColumnHelper<Booking>();
+
+const columns = [
+  columnHelper.accessor("customer", {
+    header: () => <span>Customer</span>,
+    cell: (row) => `${row.getValue().firstName} ${row.getValue().lastName}`,
+  }),
+  columnHelper.accessor("package.name", {
+    header: () => <span>Package</span>,
+    cell: (row) => row.getValue(),
+  }),
+  columnHelper.accessor("package.durationInMinutes", {
+    header: () => <span>Duration</span>,
+    cell: (row) => row.getValue(),
+  }),
+  columnHelper.accessor("location", {
+    header: () => <span>Location</span>,
+    cell: (row) => row.getValue(),
+  }),
+  columnHelper.accessor("date", {
+    header: () => <span>Date</span>,
+    cell: (row) => row.getValue(),
+  }),
+];
+
+export type BookingTableProps = {
+  data: Booking[];
+};
+
+export function BookingTable({ data }: BookingTableProps) {
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+  return (
+    <div className="w-full rounded-md border">
+      <Table>
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <TableHead key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
+                </TableHead>
+              ))}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-24 text-center">
+                No results.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
+  );
+}

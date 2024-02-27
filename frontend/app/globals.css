@@ -3,76 +3,204 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 224 0.4% 20%;
+    :root {
+        /* White */
+        --color-white: 160, 1%, 100%;
 
-    --muted: 220 14.3% 95.9%;
-    --muted-foreground: 220 8.9% 46.1%;
+        /* Mint */
+        --color-mint-50: 150, 18%, 97%;
+        --color-mint-100: 163, 33%, 96%;
+        --color-mint-200: 152, 43%, 93%;
+        --color-mint-300: 150, 50%, 89%;
+        --color-mint-400: 147, 61%, 85%;
+        --color-mint-500: 150, 49%, 73%;
+        --color-mint-600: 153, 42%, 60%;
+        --color-mint-700: 156, 35%, 48%;
+        --color-mint-800: 159, 26%, 35%;
+        --color-mint-900: 160, 15%, 23%;
+        --color-mint-950: 165, 5%, 16%;
+        --color-mint: var(--color-mint-400);
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 224 71.4% 4.1%;
+        --color-forest-50: 140, 17%, 93%;
+        --color-forest-100: 140, 16%, 85%;
+        --color-forest-200: 139, 15%, 71%;
+        --color-forest-300: 139, 15%, 56%;
+        --color-forest-400: 141, 15%, 42%;
+        --color-forest-500: 140, 15%, 27%;
+        --color-forest-600: 138, 15%, 22%;
+        --color-forest-700: 140, 15%, 16%;
+        --color-forest-800: 143, 14%, 11%;
+        --color-forest: var(--color-forest-500);
 
-    --card: 0 0% 100%;
-    --card-foreground: 224 0.4% 20%;
+        /* Gray */
+        --color-gray-25: 180, 2%, 98%;
+        --color-gray-50: 180, 4%, 96%;
+        --color-gray-100: 180, 5%, 92%;
+        --color-gray-200: 180, 4%, 82%;
+        --color-gray-300: 180, 5%, 72%;
+        --color-gray-400: 180, 5%, 59%;
+        --color-gray-500: 180, 5%, 49%;
+        --color-gray-600: 180, 5%, 39%;
+        --color-gray-700: 180, 5%, 29%;
+        --color-gray-800: 180, 4%, 18%;
+        --color-gray-900: 180, 5%, 8%;
+        --color-gray-950: 180, 5%, 4%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
+        /* Green */
+        --color-green-50: 156, 33%, 97%;
+        --color-green-100: 152, 46%, 92%;
+        --color-green-200: 152, 57%, 82%;
+        --color-green-300: 152, 64%, 67%;
+        --color-green-400: 152, 71%, 48%;
+        --color-green-500: 152, 82%, 39%;
+        --color-green-600: 152, 71%, 38%;
+        --color-green-700: 152, 64%, 34%;
+        --color-green-800: 152, 56%, 30%;
+        --color-green-900: 152, 47%, 22%;
+        --color-green-950: 152, 37%, 18%;
 
-    --primary: 220.9 39.3% 11%;
-    --primary-foreground: 210 20% 98%;
+        /* Red */
+        --color-red-50: 5, 87%, 97%;
+        --color-red-100: 5, 85%, 95%;
+        --color-red-200: 4, 86%, 89%;
+        --color-red-300: 4, 87%, 82%;
+        --color-red-400: 4, 86%, 73%;
+        --color-red-500: 4, 86%, 58%;
+        --color-red-600: 4, 86%, 49%;
+        --color-red-700: 4, 86%, 43%;
+        --color-red-800: 4, 87%, 35%;
+        --color-red-900: 4, 86%, 27%;
+        --color-red-950: 4, 86%, 17%;
 
-    --secondary: 220 14.3% 95.9%;
-    --secondary-foreground: 220.9 39.3% 11%;
+        /* Yellow */
+        --color-yellow-50: 35, 92%, 95%;
+        --color-yellow-100: 34, 92%, 90%;
+        --color-yellow-200: 34, 94%, 80%;
+        --color-yellow-300: 34, 93%, 70%;
+        --color-yellow-400: 34, 94%, 60%;
+        --color-yellow-500: 34, 94%, 50%;
+        --color-yellow-600: 34, 94%, 40%;
+        --color-yellow-700: 34, 93%, 30%;
+        --color-yellow-800: 34, 94%, 20%;
+        --color-yellow-900: 34, 92%, 10%;
+        --color-yellow-950: 33, 92%, 5%;
+    }
 
-    --accent: 220 14.3% 95.9%;
-    --accent-foreground: 220.9 39.3% 11%;
+    :root {
+        /* Primary Color - Mint */
+        --primary: var(--color-mint);
+        --primary-alt: var(--color-mint-400);
+        --on-primary: var(--color-forest);
+        --primary-hover: var(--color-mint-500);
+        --primary-active: var(--color-mint-700);
+        --primary-disabled: var(--color-mint-400);
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 20% 98%;
+        /* Secondary Color - Forest */
+        --secondary: var(--color-forest);
+        --secondary-alt: var(--color-forest-400);
+        --on-secondary: var(--color-mint);
+        --secondary-hover: var(--color-forest-600);
+        --secondary-active: var(--color-forest-700);
+        --secondary-disabled: var(--color-forest-400);
 
-    --ring: 217.9 10.6% 64.9%;
+        /* Secondary Colors - Gray */
+        --background: var(--color-mint-50);
+        --background-alt: var(--color-gray-100);
+        --background-muted: var(--color-gray-200);
 
-    --radius: 0.5rem;
-  }
+        --surface: var(--color-white);
 
-  .dark {
-    --background: 224 71.4% 4.1%;
-    --foreground: 210 20% 98%;
+        --base: var(--color-gray-950);
+        --base-100: var(--color-gray-900);
+        --base-200: var(--color-gray-800);
+        --base-300: var(--color-gray-700);
+        --base-400: var(--color-gray-600);
+        --base-500: var(--color-gray-500);
+        --base-600: var(--color-gray-400);
+        --base-700: var(--color-gray-300);
+        --base-800: var(--color-gray-200);
+        --base-900: var(--color-gray-100);
 
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.9 10.6% 64.9%;
+        --base-border: var(--color-gray-200);
 
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 210 20% 98%;
+        /* Success Colors - Green */
+        --success: var(--color-green-500);
+        --on-success: var(--color-white);
+        --success-hover: var(--color-green-600);
+        --success-active: var(--color-green-700);
+        --success-disabled: var(--color-green-400);
 
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 20% 98%;
+        /* Warning Colors - Yellow */
+        --warning: var(--color-yellow-500);
+        --on-warning: var(--color-white);
+        --warning-hover: var(--color-yellow-600);
+        --warning-active: var(--color-yellow-700);
+        --warning-disabled: var(--color-yellow-400);
 
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
+        /* Danger Colors - Red */
+        --danger: var(--color-red-500);
+        --on-danger: var(--color-white);
+        --danger-hover: var(--color-red-600);
+        --danger-active: var(--color-red-700);
+        --danger-disabled: var(--color-red-400);
+    }
 
-    --primary: 210 20% 98%;
-    --primary-foreground: 220.9 39.3% 11%;
+    .dark {
+        /* Primary Color - Mint */
+        --primary: var(--color-mint);
+        --primary-alt: var(--color-mint-400);
+        --on-primary: var(--color-forest);
+        --primary-hover: var(--color-mint-600);
+        --primary-active: var(--color-mint-700);
+        --primary-disabled: var(--color-mint-400);
 
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 210 20% 98%;
+        /* Secondary Color - Forest */
+        --secondary: var(--color-forest);
+        --secondary-alt: var(--color-forest-400);
+        --on-secondary: var(--color-mint);
+        --secondary-hover: var(--color-forest-600);
+        --secondary-active: var(--color-forest-700);
+        --secondary-disabled: var(--color-forest-400);
 
-    --accent: 215 27.9% 16.9%;
-    --accent-foreground: 210 20% 98%;
+        /* Secondary Colors - Gray */
+        --background: var(--color-gray-900);
+        --background-alt: var(--color-gray-800);
+        --background-muted: var(--color-gray-700);
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 85.7% 97.3%;
+        --surface: var(--color-gray-950);
 
-    --ring: 215 27.9% 16.9%;
-  }
-}
+        --base: var(--color-gray-50);
+        --base-100: var(--color-gray-100);
+        --base-200: var(--color-gray-200);
+        --base-300: var(--color-gray-300);
+        --base-400: var(--color-gray-400);
+        --base-500: var(--color-gray-500);
+        --base-600: var(--color-gray-600);
+        --base-700: var(--color-gray-700);
+        --base-800: var(--color-gray-800);
+        --base-900: var(--color-gray-900);
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+        --base-border: var(--color-gray-800);
+
+        /* Success Colors - Green */
+        --success: var(--color-green-500);
+        --on-success: var(--color-white);
+        --success-hover: var(--color-green-600);
+        --success-active: var(--color-green-700);
+        --success-disabled: var(--color-green-400);
+
+        /* Warning Colors - Yellow */
+        --warning: var(--color-yellow-500);
+        --on-warning: var(--color-white);
+        --warning-hover: var(--color-yellow-600);
+        --warning-active: var(--color-yellow-700);
+        --warning-disabled: var(--color-yellow-400);
+
+        /* Danger Colors - Red */
+        --danger: var(--color-red-500);
+        --on-danger: var(--color-white);
+        --danger-hover: var(--color-red-600);
+        --danger-active: var(--color-red-700);
+        --danger-disabled: var(--color-red-400);
+    }
 }

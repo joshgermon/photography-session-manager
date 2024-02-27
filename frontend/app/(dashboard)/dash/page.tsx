@@ -1,11 +1,10 @@
-import { UpcomingSessions } from "@/components/sessions/upcoming-sessions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Home() {
   return (
     <main className="flex flex-col space-y-6">
       <div className="">
-        <h2 className="font-medium text-xl">Overview</h2>
+        <h2 className="font-medium text-xl text-base">Good Afternoon, User</h2>
         <div className="py-4 flex space-x-6">
           <Card className="flex-grow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -48,7 +47,6 @@ export default function Home() {
           </Card>
         </div>
       </div>
-      <UpcomingSessions />
     </main>
   );
 }
