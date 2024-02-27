@@ -25,6 +25,7 @@ services:
       - "3333:3333"
     environment:
       - DATABASE_URL=postgres://postgres:u!73bG2sanDaL8)d50ax@postgres:5432/development
+      - PORT=3333
     volumes:
       - ./api/:/captura-books-api/
     depends_on:
