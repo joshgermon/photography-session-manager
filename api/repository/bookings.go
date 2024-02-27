@@ -36,6 +36,7 @@ type BookingDetails struct {
 }
 
 type NewBooking struct {
+	UserID           int       `json:"userId"`
 	Date             time.Time `json:"date"`
 	Location         string    `json:"location"`
 	CustomerID       int       `json:"customerID"`
@@ -161,8 +162,14 @@ func (b *bookingRepository) Create(ctx context.Context, booking *NewBooking) err
 	return err
 }
 
+func (b *bookingRepository) Delete(ctx context.Context, id int) error {
+	_, err := b.db.Exec(ctx, `DELETE FROM booking WHERE booking_id=$1`, id)
+	return err
+}
+
 type BookingRepository interface {
 	Create(ctx context.Context, booking *NewBooking) error
 	GetAll(ctx context.Context) ([]BookingDetails, error)
 	GetByID(ctx context.Context, id int) (BookingDetails, error)
+	Delete(ctx context.Context, id int) error
 }

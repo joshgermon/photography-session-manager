@@ -67,6 +67,8 @@ func (s *server) CreateBooking(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+    // Default user for now
+    booking.UserID = 1;
 	s.bookingRepo.Create(context.Background(), &booking)
 
 	if err != nil {
@@ -76,4 +78,22 @@ func (s *server) CreateBooking(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusNoContent)
+}
+
+func (s *server) DeleteBooking(w http.ResponseWriter, r *http.Request) {
+	bookingID := chi.URLParam(r, "bookingID")
+	id, err := strconv.Atoi(bookingID)
+	if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+	}
+
+	err = s.bookingRepo.Delete(context.Background(), id)
+	if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 }

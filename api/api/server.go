@@ -64,6 +64,7 @@ func (s *server) Routes() *chi.Mux {
 	r.Get("/v1/bookings", s.GetBookings)
 	r.Get("/v1/bookings/{bookingID}", s.GetBookingByID)
 	r.Post("/v1/bookings", s.CreateBooking)
+	r.Delete("/v1/bookings/{bookingID}", s.DeleteBooking)
 
 	r.Get("/v1/customers", s.GetCustomers)
 	r.Get("/v1/customers/{customerID}", s.GetCustomerByID)

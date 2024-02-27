@@ -78,6 +78,9 @@ func (s *server) CreateCustomer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+    // Hardcode user id for now
+    customer.UserID = 1
+
 	s.customerRepo.Create(context.Background(), &customer)
 
 	if err != nil {
