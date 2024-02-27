@@ -9,6 +9,14 @@ CREATE TABLE user_account (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- User Sessions Table
+CREATE TABLE user_session (
+    session_id VARCHAR(128) PRIMARY KEY,
+    user_id INT REFERENCES user_account(user_id) NOT NULL,
+    expires_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Customer Table
 CREATE TABLE customer (
     customer_id SERIAL PRIMARY KEY,
@@ -50,4 +58,9 @@ CREATE TABLE session_package (
     price INT NOT NULL,
     currency_code VARCHAR(3) DEFAULT 'AUD',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Test User
+INSERT INTO user_account (first_name, last_name, email_address, password) VALUES (
+    'Test', 'Account', 'joshgermon@gmail.com', 'hashed_pw_mocked'
 );

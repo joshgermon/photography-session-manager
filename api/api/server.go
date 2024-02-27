@@ -14,6 +14,7 @@ import (
 type server struct {
 	logger *slog.Logger
 
+	userRepo repository.UserRepository
 	customerRepo repository.CustomerRepository
 	bookingRepo  repository.BookingRepository
 	offeringRepo repository.OfferingRepository
@@ -28,6 +29,7 @@ type ErrorResponse struct {
 }
 
 func NewServer(ctx context.Context, logger *slog.Logger, db *pgxpool.Pool) *server {
+	userRepo := repository.NewUserRepository(db)
 	customerRepo := repository.NewCustomerRepository(db)
 	bookingRepo := repository.NewBookingRepository(db)
 	offeringRepo := repository.NewOfferingRepository(db)
@@ -35,6 +37,7 @@ func NewServer(ctx context.Context, logger *slog.Logger, db *pgxpool.Pool) *serv
 	return &server{
 		logger: logger,
 
+		userRepo: userRepo,
 		customerRepo: customerRepo,
 		bookingRepo:  bookingRepo,
 		offeringRepo: offeringRepo,
@@ -55,6 +58,8 @@ func (s *server) Routes() *chi.Mux {
 		AllowCredentials: false,
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
+
+	r.Post("/v1/login", s.LoginUser)
 
 	r.Get("/v1/bookings", s.GetBookings)
 	r.Get("/v1/bookings/{bookingID}", s.GetBookingByID)

@@ -12,5 +12,8 @@ DROP TABLE IF EXISTS booking;
 -- Drop Customer Table
 DROP TABLE IF EXISTS customer;
 
+-- Drop User Session Table
+DROP TABLE IF EXISTS user_session;
+
 -- Drop User Table
 DROP TABLE IF EXISTS user_account;

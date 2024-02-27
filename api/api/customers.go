@@ -69,6 +69,8 @@ func (s *server) GetCustomerByID(w http.ResponseWriter, r *http.Request) {
 
 func (s *server) CreateCustomer(w http.ResponseWriter, r *http.Request) {
 	customer := repository.NewCustomer{}
+    // Temp
+    customer.UserID = 1
 
 	err := json.NewDecoder(r.Body).Decode(&customer)
 	if err != nil {

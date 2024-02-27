@@ -22,6 +22,7 @@ type Customer struct {
 }
 
 type NewCustomer struct {
+	UserID       int     `json:"userId"`
 	FirstName    string  `json:"firstName"`
 	LastName     string  `json:"lastName"`
 	EmailAddress string  `json:"emailAddress"`
@@ -33,8 +34,8 @@ func NewCustomerRepository(db *pgxpool.Pool) *customerRepository {
 }
 
 func (c *customerRepository) Create(ctx context.Context, customer *NewCustomer) error {
-	_, err := c.db.Exec(ctx, "INSERT INTO customer (first_name, last_name, email_address, mobile_number) VALUES ($1, $2, $3, $4)",
-		customer.FirstName, customer.LastName, customer.EmailAddress, customer.MobileNo)
+	_, err := c.db.Exec(ctx, "INSERT INTO customer (user_id, first_name, last_name, email_address, mobile_number) VALUES ($1, $2, $3, $4, $5)",
+		customer.UserID, customer.FirstName, customer.LastName, customer.EmailAddress, customer.MobileNo)
 	return err
 }
 
@@ -76,7 +77,7 @@ func (c *customerRepository) SearchByName(ctx context.Context, nameQuery string)
 	}
 	defer rows.Close()
 
-    customers := []Customer{}
+	customers := []Customer{}
 	for rows.Next() {
 		var customer Customer
 		err := rows.Scan(&customer.Id, &customer.FirstName, &customer.LastName,

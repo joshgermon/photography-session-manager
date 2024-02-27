@@ -2,6 +2,8 @@ package repository
 
 import (
 	"context"
+	"database/sql"
+	"fmt"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -9,6 +11,18 @@ import (
 
 type offeringRepository struct {
 	db *pgxpool.Pool
+}
+
+type OfferingPackageJoin struct {
+	SessionTypeId          int
+	SessionTypeName        string
+	SessionTypeDescription string
+	SessionTypeCreatedAt   time.Time
+	PackageId              sql.NullInt64
+	PackageName            sql.NullString
+	DurationInMinutes      sql.NullInt64
+	Price                  sql.NullInt64
+	PackageCreatedAt       sql.NullTime
 }
 
 type Offering struct {
@@ -49,11 +63,11 @@ func (o *offeringRepository) GetAll(ctx context.Context) ([]OfferingWithPackages
             sp.created_at
         FROM
             session_type AS st
-        INNER JOIN
+        LEFT JOIN
             session_package AS sp ON sp.session_type_id = st.session_type_id
         `)
 	if err != nil {
-		return []OfferingWithPackages{}, err
+		return nil, err
 	}
 	defer rows.Close()
 
@@ -62,32 +76,51 @@ func (o *offeringRepository) GetAll(ctx context.Context) ([]OfferingWithPackages
 
 	// Iterate through the rows and scan the results into the slice
 	for rows.Next() {
+		var row OfferingPackageJoin
 		var offering Offering
 		var offeringPackage OfferingPackage
-		err := rows.Scan(&offering.Id, &offering.Name, &offering.Description, &offering.CreatedAt,
-			&offeringPackage.Id, &offeringPackage.Name, &offeringPackage.DurationInMinutes,
-			&offeringPackage.Price, &offeringPackage.CreatedAt)
+
+		err := rows.Scan(&row.SessionTypeId, &row.SessionTypeName, &row.SessionTypeDescription,
+			&row.SessionTypeCreatedAt, &row.PackageId, &row.PackageName, &row.DurationInMinutes,
+			&row.Price, &row.PackageCreatedAt)
+
+		fmt.Printf("%+v\n", row)
+
 		if err != nil {
-            return []OfferingWithPackages{}, err
+			return nil, err
 		}
 
 		// Check if we've encountered this session before
 		if _, ok := offeringsMap[offering.Id]; !ok {
 			offeringsMap[offering.Id] = &OfferingWithPackages{
-				Offering: offering,
+				Offering: Offering{
+					Id:          row.SessionTypeId,
+					Name:        row.SessionTypeName,
+					Description: row.SessionTypeDescription,
+					CreatedAt:   row.SessionTypeCreatedAt,
+				},
 			}
 		}
 
-		offeringsMap[offering.Id].Packages = append(offeringsMap[offering.Id].Packages, &offeringPackage)
+		if row.PackageId.Valid {
+			offeringPackage = OfferingPackage{
+				Id:                int(row.PackageId.Int64),
+				Name:              row.PackageName.String,           // Use .String to get the string value
+				DurationInMinutes: int(row.DurationInMinutes.Int64), // Convert sql.NullInt64 to int
+				Price:             float64(row.Price.Int64),         // Convert sql.NullInt64 to float64
+				CreatedAt:         row.PackageCreatedAt.Time,        // Use .Time to get the time value
+			}
+			offeringsMap[offering.Id].Packages = append(offeringsMap[offering.Id].Packages, &offeringPackage)
+		}
 	}
 
-    // Covert map to slice
-    offerings := make([]OfferingWithPackages, 0, len(offeringsMap))
-    for  _, value := range offeringsMap {
-       offerings = append(offerings, *value)
-    }
+	// Covert map to slice
+	offerings := make([]OfferingWithPackages, 0, len(offeringsMap))
+	for _, value := range offeringsMap {
+		offerings = append(offerings, *value)
+	}
 
-    return offerings, nil
+	return offerings, nil
 }
 
 type OfferingRepository interface {
