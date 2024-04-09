@@ -147,6 +147,7 @@ func (b *bookingRepository) GetByID(ctx context.Context, id int) (BookingDetails
 
 	bookingWithCustomer := BookingDetails{
 		Booking:  booking,
+		Package: bookingPackage,
 		Customer: customer,
 	}
 
