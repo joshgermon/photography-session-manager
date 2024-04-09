@@ -11,7 +11,7 @@ import {
 } from "react-aria-components";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Customer } from "@/app/(dashboard)/customers/page";
+import { Customer } from "@/lib/api/customers";
 import { Label } from "../ui/label";
 import { LuChevronsUpDown } from "react-icons/lu";
 
@@ -29,7 +29,6 @@ async function getFilteredCustomers() {
  * especially considering it's loading all Customers
  * and then filtering them on the client combobox
  * which obviously isn't great */
-
 
 export const CustomerSelectInput = forwardRef(({ onSelect, ...props }, ref) => {
   const [filterText, setFilterText] = useState("");
@@ -70,7 +69,10 @@ export const CustomerSelectInput = forwardRef(({ onSelect, ...props }, ref) => {
     >
       <Label>Customer</Label>
       <Group className="flex rounded-lg bg-surface border border-base-900 bg-opacity-90 focus-within:bg-opacity-100 transition focus-visible:ring-2 focus-visible:ring-primary">
-        <Input className="rounded-none border-none" placeholder="Select customer" />
+        <Input
+          className="rounded-none border-none"
+          placeholder="Select customer"
+        />
         <Button
           variant="ghost"
           className="h-full border-base-900 bg-transparent rounded-r-lg"

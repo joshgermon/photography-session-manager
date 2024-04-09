@@ -1,3 +1,4 @@
+import { UpcomingSessions } from "@/components/bookings/upcoming-sessions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Home() {
@@ -13,7 +14,7 @@ export default function Home() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-semibold">120</div>
+              <div className="text-2xl font-medium">120</div>
               <p className="text-xs text-muted-foreground">
                 +20.1% from last month
               </p>
@@ -26,7 +27,7 @@ export default function Home() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-semibold">$45,231.89</div>
+              <div className="text-2xl font-medium">$45,231.89</div>
               <p className="text-xs text-muted-foreground">
                 +20.1% from last month
               </p>
@@ -39,12 +40,15 @@ export default function Home() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-semibold">17</div>
+              <div className="text-2xl font-medium">17</div>
               <p className="text-xs text-muted-foreground">
                 +20.1% from last month
               </p>
             </CardContent>
           </Card>
+        </div>
+        <div>
+          <UpcomingSessions />
         </div>
       </div>
     </main>

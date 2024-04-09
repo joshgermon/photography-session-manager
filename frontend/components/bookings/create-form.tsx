@@ -49,7 +49,6 @@ async function getOfferings() {
   }
 }
 
-
 async function createBooking(newBooking: BookingFormInput) {
   newBooking.userID = 1; // TODO
   const createResponse = await fetch(
@@ -65,11 +64,15 @@ async function createBooking(newBooking: BookingFormInput) {
 }
 
 export function BookingCreateForm() {
-  const { register, handleSubmit, control, watch } = useForm<BookingFormInput>();
+  const { register, handleSubmit, control, watch } =
+    useForm<BookingFormInput>();
   const queryClient = useQueryClient();
   const [isOpen, setOpen] = useState(false);
 
-  const offeringsQuery = useQuery({ queryKey: ["offerings"], queryFn: getOfferings });
+  const offeringsQuery = useQuery({
+    queryKey: ["offerings"],
+    queryFn: getOfferings,
+  });
   const offerings = offeringsQuery.data?.data;
 
   const selectedOfferingType = watch("offeringTypeID");
@@ -126,7 +129,7 @@ export function BookingCreateForm() {
       <ModalOverlay isOpen={isOpen} onOpenChange={setOpen} isDismissable>
         <Modal>
           <Dialog className="px-6 py-6">
-            <Heading slot="title" className="text-lg font-semibold">
+            <Heading slot="title" className="text-lg font-medium">
               Create Booking
             </Heading>
             <p className="text-sm text-base-400 pb-4">
@@ -141,9 +144,7 @@ export function BookingCreateForm() {
                 name="customerID"
                 rules={{ required: "Name is required." }}
                 render={({ field }) => (
-                  <CustomerSelectInput
-                    onSelect={field.onChange}
-                  />
+                  <CustomerSelectInput onSelect={field.onChange} />
                 )}
               />
 
@@ -152,10 +153,16 @@ export function BookingCreateForm() {
                 name="offeringTypeID"
                 rules={{ required: "Session Type is required." }}
                 render={({ field }) => (
-                  <Select onSelectionChange={field.onChange} label="Session Type">
+                  <Select
+                    onSelectionChange={field.onChange}
+                    label="Session Type"
+                  >
                     {offerings?.map((offering) => (
-                      <ListBoxItem id={offering.id} textValue={offering.name}
-                        className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground disabled:pointer-events-none disabled:opacity-50 selected:bg-primary focus-visible:ring-1 focus-visible:ring-primary" >
+                      <ListBoxItem
+                        id={offering.id}
+                        textValue={offering.name}
+                        className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground disabled:pointer-events-none disabled:opacity-50 selected:bg-primary focus-visible:ring-1 focus-visible:ring-primary"
+                      >
                         {offering.name}
                       </ListBoxItem>
                     ))}
@@ -168,17 +175,27 @@ export function BookingCreateForm() {
                 name="offeringPackageID"
                 rules={{ required: "Offering Package is required." }}
                 render={({ field }) => (
-                  <Select isDisabled={!selectedOfferingType} onSelectionChange={field.onChange} name="offeringPackageID" label="Package">
-                    {selectedOfferingType ?
-                      offerings.find((type) => type.id === Number(selectedOfferingType))?.packages?.map((sessionPackage: any) => (
-                        <ListBoxItem
-                          className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground disabled:pointer-events-none disabled:opacity-50 selected:bg-primary focus-visible:ring-1 focus-visible:ring-primary"
-                          id={sessionPackage.id}
-                          textValue={sessionPackage.name}
-                        >
-                          {sessionPackage.name}
-                        </ListBoxItem>
-                      )) : (null)}
+                  <Select
+                    isDisabled={!selectedOfferingType}
+                    onSelectionChange={field.onChange}
+                    name="offeringPackageID"
+                    label="Package"
+                  >
+                    {selectedOfferingType
+                      ? offerings
+                          .find(
+                            (type) => type.id === Number(selectedOfferingType),
+                          )
+                          ?.packages?.map((sessionPackage: any) => (
+                            <ListBoxItem
+                              className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground disabled:pointer-events-none disabled:opacity-50 selected:bg-primary focus-visible:ring-1 focus-visible:ring-primary"
+                              id={sessionPackage.id}
+                              textValue={sessionPackage.name}
+                            >
+                              {sessionPackage.name}
+                            </ListBoxItem>
+                          ))
+                      : null}
                   </Select>
                 )}
               />
@@ -188,8 +205,13 @@ export function BookingCreateForm() {
                 name="date"
                 rules={{ required: "Session Date is required." }}
                 render={({ field }) => (
-                  <DatePicker label="Session Date" onChange={(date: DateValue) =>
-                    field.onChange(date.toDate(getLocalTimeZone()))} minValue={today(getLocalTimeZone())}/>
+                  <DatePicker
+                    label="Session Date"
+                    onChange={(date: DateValue) =>
+                      field.onChange(date.toDate(getLocalTimeZone()))
+                    }
+                    minValue={today(getLocalTimeZone())}
+                  />
                 )}
               />
 

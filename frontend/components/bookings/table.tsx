@@ -14,26 +14,8 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { Customer } from "@/app/(dashboard)/customers/page";
-
-export type Booking = {
-  id: number;
-  date: string;
-  location: string | null;
-  createdAt: string;
-  package: Package;
-  customer: Customer;
-};
-
-type Package = {
-  id: string;
-  name: string;
-  durationInMinutes: string;
-  price: string;
-  typeId: number;
-  type: string;
-  typeDescripting: string;
-};
+import { format } from "date-fns";
+import { Booking } from "@/lib/api/bookings";
 
 const columnHelper = createColumnHelper<Booking>();
 
@@ -56,7 +38,11 @@ const columns = [
   }),
   columnHelper.accessor("date", {
     header: () => <span>Date</span>,
-    cell: (row) => row.getValue(),
+    cell: (row) => format(new Date(row.getValue()), "EE, do MMM 'at' h:mma"),
+  }),
+  columnHelper.accessor("id", {
+    header: () => <span></span>,
+    cell: (row) => <a href={`bookings/${row.getValue()}`}>Manage</a>,
   }),
 ];
 

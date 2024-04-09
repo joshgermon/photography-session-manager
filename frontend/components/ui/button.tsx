@@ -9,7 +9,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-primary text-base text-sm hover:bg-primary-hover",
-        destructive: "bg-danger text-danger-foreground hover:bg-danger-hover",
+        destructive: "bg-danger hover:bg-danger-hover",
         outline:
           "border border-input bg-surface shadow-sm hover:bg-accent hover:text-accent-foreground",
         ghost: "bg-none hover:bg-accent hover:text-accent-foreground",
@@ -31,6 +31,12 @@ const buttonVariants = cva(
 
 export type ButtonProps = VariantProps<typeof buttonVariants> & RACButtonProps;
 
+export type ButtonLinkProps = VariantProps<typeof buttonVariants> & {
+  href: string;
+  className?: string;
+  children?: React.ReactNode;
+};
+
 export function Button({
   className,
   variant,
@@ -45,5 +51,24 @@ export function Button({
     >
       {children}
     </RACButton>
+  );
+}
+
+export function ButtonLink({
+  className,
+  variant,
+  size,
+  children,
+  href,
+  ...props
+}: ButtonLinkProps) {
+  return (
+    <a
+      href={href}
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    >
+      {children}
+    </a>
   );
 }

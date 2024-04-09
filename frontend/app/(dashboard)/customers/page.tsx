@@ -4,21 +4,7 @@ import { CustomerTable } from "@/components/customers/table";
 import { Input } from "@/components/ui/input";
 import { useQuery } from "@tanstack/react-query";
 import { CustomerCreateForm } from "@/components/customers/create-form";
-
-export type Customer = {
-  firstName: string;
-  lastName: string;
-  emailAddress: string;
-  mobileNumber: string | null;
-};
-
-async function getCustomers() {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/customers`,
-  );
-  const data = await res.json();
-  return data.data;
-}
+import { getCustomers } from "@/lib/api/customers";
 
 export default function Customers() {
   const query = useQuery({ queryKey: ["customers"], queryFn: getCustomers });
@@ -32,7 +18,7 @@ export default function Customers() {
     <main className="flex flex-col space-y-6">
       <div className="">
         <div className="pb-5">
-          <h2 className="font-semibold text-xl text-base">
+          <h2 className="font-medium text-xl text-base">
             Manage Your Customers
           </h2>
           <p className="text-base-300">

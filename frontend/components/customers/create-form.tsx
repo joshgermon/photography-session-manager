@@ -101,7 +101,7 @@ export function CustomerCreateForm() {
       <ModalOverlay isOpen={isOpen} onOpenChange={setOpen} isDismissable>
         <Modal>
           <Dialog className="px-6 py-6">
-            <Heading slot="title" className="text-lg font-semibold">
+            <Heading slot="title" className="text-lg font-medium">
               Create Customer
             </Heading>
             <p className="text-sm text-base-400 pb-4">

@@ -22,20 +22,21 @@ export default function Packages() {
     <main className="flex flex-col space-y-6">
       <div className="">
         <div className="pb-5">
-          <h2 className="font-semibold text-xl text-base">
+          <h2 className="font-medium text-xl text-base">
             Create your Packages
           </h2>
           <p className="text-base-300">
-            This is your list of packages and offerings where you can manage them.
+            This is your list of packages and offerings where you can manage
+            them.
           </p>
         </div>
         <div className="py-4 flex space-x-6">
-          { allOfferings.map((o) => (
+          {allOfferings.map((o) => (
             <div className="w-full border border-base-900 px-4 py-4 rounded">
-              <h2 className="font-semibold text-lg text-base">{o.name}</h2>
+              <h2 className="font-medium text-lg text-base">{o.name}</h2>
               <p className="text-sm text-base-300">{o.description}</p>
             </div>
-            )) }
+          ))}
         </div>
       </div>
     </main>
