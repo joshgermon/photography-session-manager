@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { VariantProps, cva } from "class-variance-authority";
+import Link from "next/link";
 import { Button as RACButton } from "react-aria-components";
 import type { ButtonProps as RACButtonProps } from "react-aria-components";
 
@@ -63,12 +64,12 @@ export function ButtonLink({
   ...props
 }: ButtonLinkProps) {
   return (
-    <a
+    <Link
       href={href}
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     >
       {children}
-    </a>
+    </Link>
   );
 }

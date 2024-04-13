@@ -16,6 +16,7 @@ import {
 } from "../ui/table";
 import { format } from "date-fns";
 import { Booking } from "@/lib/api/bookings";
+import Link from "next/link";
 
 const columnHelper = createColumnHelper<Booking>();
 
@@ -42,7 +43,7 @@ const columns = [
   }),
   columnHelper.accessor("id", {
     header: () => <span></span>,
-    cell: (row) => <a href={`bookings/${row.getValue()}`}>Manage</a>,
+    cell: (row) => <Link href={`bookings/${row.getValue()}`}>Manage</Link>,
   }),
 ];
 
