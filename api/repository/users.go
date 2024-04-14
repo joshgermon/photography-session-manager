@@ -24,6 +24,12 @@ type User struct {
 	CreatedAt    time.Time `json:"createdAt"`
 }
 
+type UserSession struct {
+	Id           string       `json:"id"`
+  UserID       int       `json:"userID"`
+	ExpiresAt    time.Time `json:"expiresAt"`
+}
+
 func NewUserRepository(db *pgxpool.Pool) *userRepository {
 	return &userRepository{db: db}
 }
@@ -100,9 +106,33 @@ func (u *userRepository) GetByEmail(ctx context.Context, email string) (User, er
 	return user, nil
 }
 
+func (u *userRepository) GetSessionByID(ctx context.Context, sessionID string) (UserSession, error) {
+	row, err := u.db.Query(ctx,
+		`SELECT session_id, user_id, expires_at
+         FROM user_session
+         WHERE session_id=$1
+         LIMIT 1`, sessionID)
+	if err != nil {
+		return UserSession{}, fmt.Errorf("Database query error: %w", err)
+	}
+	defer row.Close()
+
+	var userSession UserSession
+	if row.Next() {
+		err = row.Scan(&userSession.Id, &userSession.UserID, &userSession.ExpiresAt)
+		if err != nil {
+			return UserSession{}, fmt.Errorf("Row scan error: %w", err)
+		}
+	} else {
+		return UserSession{}, fmt.Errorf("No session found")
+	}
+	return userSession, nil
+}
+
 type UserRepository interface {
 	Get(ctx context.Context) ([]User, error)
 	// GetByID(ctx context.Context, id int) (User, error)
 	GetByEmail(ctx context.Context, email string) (User, error)
 	CreateSession(ctx context.Context, userID int) (string, error)
+	GetSessionByID(ctx context.Context, sessionID string) (UserSession, error)
 }

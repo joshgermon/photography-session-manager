@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { Input as RACInput } from "react-aria-components";
 import { cn } from "@/lib/utils";

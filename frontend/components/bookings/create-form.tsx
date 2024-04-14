@@ -13,95 +13,31 @@ import { DatePicker } from "../ui/date-picker";
 import { Modal, ModalOverlay } from "../ui/modal";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Booking } from "@/app/(dashboard)/bookings/page";
 import { useState } from "react";
 import { toast } from "sonner";
 import { CustomerSelectInput } from "./customer-select";
 import { Select } from "../ui/select";
 import { getLocalTimeZone, today } from "@internationalized/date";
+import { getSessionTypesAndPackages } from "@/lib/api/packages";
+import { BookingFormInput, createBooking } from "@/lib/api/bookings";
 
-type BookingFormInput = {
-  customerID: string;
-  offeringTypeID: string;
-  offeringPackageID: string;
-  date: Date;
-  location: string;
-};
-
-type NewBooking = {
-  userID: number;
-  customerID: number;
-  offeringTypeID: string;
-  offeringPackageID: string;
-  date: Date;
-  location: string;
-};
-
-async function getOfferings() {
-  const offerings = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/offerings`,
-  );
-  if (offerings.ok) {
-    const offeringData = await offerings.json();
-    return offeringData;
-  } else {
-    throw Error("Failed");
-  }
-}
-
-async function createBooking(newBooking: BookingFormInput) {
-  newBooking.userID = 1; // TODO
-  const createResponse = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/bookings`,
-    {
-      method: "POST",
-      body: JSON.stringify(newBooking),
-    },
-  );
-  if (!createResponse.ok) {
-    throw Error("Failed");
-  }
-}
 
 export function BookingCreateForm() {
-  const { register, handleSubmit, control, watch } =
+  const { handleSubmit, control, watch } =
     useForm<BookingFormInput>();
   const queryClient = useQueryClient();
   const [isOpen, setOpen] = useState(false);
 
   const offeringsQuery = useQuery({
     queryKey: ["offerings"],
-    queryFn: getOfferings,
+    queryFn: getSessionTypesAndPackages,
   });
-  const offerings = offeringsQuery.data?.data;
+  const offerings = offeringsQuery?.data;
 
   const selectedOfferingType = watch("offeringTypeID");
 
   const bookingMutation = useMutation({
     mutationFn: createBooking,
-    // onMutate: async (newBooking) => {
-    //   // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-    //   await queryClient.cancelQueries({ queryKey: ["bookings"] });
-    //
-    //   // Snapshot the previous value
-    //   const previousBookings = queryClient.getQueryData(["bookings"]);
-    //
-    //   // Optimistically update to the new value
-    //   queryClient.setQueryData(["bookings"], (old: Booking[]) => [
-    //     ...old,
-    //     newBooking,
-    //   ]);
-    //
-    //   // Return a context object with the snapshotted value
-    //   return { previousBookings: previousBookings };
-    // },
-
-    // If the mutation fails,
-    // use the context returned from onMutate to roll back
-    // onError: (err, newBooking, context) => {
-    //   console.error("Failed to create booking.", err);
-    // },
-    // Always refetch after error or success:
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["bookings"] });
       console.log("Mutation completed, invalidated query.");
@@ -109,7 +45,6 @@ export function BookingCreateForm() {
   });
 
   const onSubmit = (data: BookingFormInput) => {
-    console.log(data);
     const mutation = bookingMutation.mutateAsync(data);
 
     toast.promise(mutation, {
@@ -183,18 +118,18 @@ export function BookingCreateForm() {
                   >
                     {selectedOfferingType
                       ? offerings
-                          .find(
-                            (type) => type.id === Number(selectedOfferingType),
-                          )
-                          ?.packages?.map((sessionPackage: any) => (
-                            <ListBoxItem
-                              className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground disabled:pointer-events-none disabled:opacity-50 selected:bg-primary focus-visible:ring-1 focus-visible:ring-primary"
-                              id={sessionPackage.id}
-                              textValue={sessionPackage.name}
-                            >
-                              {sessionPackage.name}
-                            </ListBoxItem>
-                          ))
+                        .find(
+                          (type) => type.id === Number(selectedOfferingType),
+                        )
+                        ?.packages?.map((sessionPackage: any) => (
+                          <ListBoxItem
+                            className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground disabled:pointer-events-none disabled:opacity-50 selected:bg-primary focus-visible:ring-1 focus-visible:ring-primary"
+                            id={sessionPackage.id}
+                            textValue={sessionPackage.name}
+                          >
+                            {sessionPackage.name}
+                          </ListBoxItem>
+                        ))
                       : null}
                   </Select>
                 )}
@@ -207,6 +142,7 @@ export function BookingCreateForm() {
                 render={({ field }) => (
                   <DatePicker
                     label="Session Date"
+                    granularity="minute"
                     onChange={(date: DateValue) =>
                       field.onChange(date.toDate(getLocalTimeZone()))
                     }
@@ -215,16 +151,26 @@ export function BookingCreateForm() {
                 )}
               />
 
-              <TextField>
-                <Label>Location</Label>
-                <Input
-                  placeholder="Zion National Park, Utah"
-                  minLength={2}
-                  required
-                  {...register("location")}
-                />
-                <FieldError className="text-xs text-red-500" />
-              </TextField>
+              <Controller
+                control={control}
+                name="location"
+                rules={{ required: "Location is required." }}
+                render={({
+                  field,
+                  fieldState: { invalid },
+                }) => (
+                  <TextField type="text" isInvalid={invalid}  >
+                    <Label>Location</Label>
+                    <Input
+                      placeholder="Zion National Park, Utah"
+                      minLength={2}
+                      required
+                      {...field}
+                    />
+                    <FieldError className="text-xs text-red-500" />
+                  </TextField>)}
+              />
+
               <div className="pt-2 flex w-full justify-end space-x-2">
                 <Button
                   variant="outline"

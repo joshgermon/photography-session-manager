@@ -2,9 +2,7 @@
 
 import { BookingCard } from "@/components/bookings/booking-card";
 import { BookingCreateForm } from "@/components/bookings/create-form";
-import { BookingTable } from "@/components/bookings/table";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { getBookings } from "@/lib/api/bookings";
 import { useQuery } from "@tanstack/react-query";
 
@@ -34,10 +32,20 @@ export default function Bookings() {
       <div className="flex-col space-y-2">
         {/* <BookingTable data={allBookings} /> */}
         {query.isLoading && (
-          <div className="rounded-lg border border-base-border bg-surface text-base p-5 flex-col space-y-2">
-            <div className="w-full rounded-sm h-5 bg-gray-50"></div>
-            <div className="w-full rounded-sm h-5 bg-gray-50"></div>
-          </div>
+          <>
+            <div className="rounded-lg border border-base-border bg-surface text-base p-5 flex-col space-y-2">
+              <div className="w-full rounded-sm h-5 bg-gray-50"></div>
+              <div className="w-full rounded-sm h-5 bg-gray-50"></div>
+            </div>
+            <div className="rounded-lg border border-base-border bg-surface text-base p-5 flex-col space-y-2">
+              <div className="w-full rounded-sm h-5 bg-gray-50"></div>
+              <div className="w-full rounded-sm h-5 bg-gray-50"></div>
+            </div>
+            <div className="rounded-lg border border-base-border bg-surface text-base p-5 flex-col space-y-2">
+              <div className="w-full rounded-sm h-5 bg-gray-50"></div>
+              <div className="w-full rounded-sm h-5 bg-gray-50"></div>
+            </div>
+          </>
         )}
         {query.data &&
           query.data.map((booking) => (

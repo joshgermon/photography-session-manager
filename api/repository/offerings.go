@@ -77,7 +77,6 @@ func (o *offeringRepository) GetAll(ctx context.Context) ([]OfferingWithPackages
 	// Iterate through the rows and scan the results into the slice
 	for rows.Next() {
 		var row OfferingPackageJoin
-		var offering Offering
 		var offeringPackage OfferingPackage
 
 		err := rows.Scan(&row.SessionTypeId, &row.SessionTypeName, &row.SessionTypeDescription,
@@ -91,8 +90,8 @@ func (o *offeringRepository) GetAll(ctx context.Context) ([]OfferingWithPackages
 		}
 
 		// Check if we've encountered this session before
-		if _, ok := offeringsMap[offering.Id]; !ok {
-			offeringsMap[offering.Id] = &OfferingWithPackages{
+		if _, ok := offeringsMap[row.SessionTypeId]; !ok {
+			offeringsMap[row.SessionTypeId] = &OfferingWithPackages{
 				Offering: Offering{
 					Id:          row.SessionTypeId,
 					Name:        row.SessionTypeName,
@@ -110,7 +109,7 @@ func (o *offeringRepository) GetAll(ctx context.Context) ([]OfferingWithPackages
 				Price:             float64(row.Price.Int64),         // Convert sql.NullInt64 to float64
 				CreatedAt:         row.PackageCreatedAt.Time,        // Use .Time to get the time value
 			}
-			offeringsMap[offering.Id].Packages = append(offeringsMap[offering.Id].Packages, &offeringPackage)
+			offeringsMap[row.SessionTypeId].Packages = append(offeringsMap[row.SessionTypeId].Packages, &offeringPackage)
 		}
 	}
 

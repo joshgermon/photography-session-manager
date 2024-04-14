@@ -34,7 +34,7 @@ export function DatePicker<T extends DateValue>({
   ...props
 }: CustomDatePickerProps<T>) {
   return (
-    <RACDatePicker {...props}>
+    <RACDatePicker {...props} >
       <Label>Date of Session</Label>
       <Group className="flex rounded-lg bg-surface border border-base-900 bg-opacity-90 focus-within:bg-opacity-100 transition focus-visible:ring-2 focus-visible:ring-primary">
         <Button
@@ -45,7 +45,7 @@ export function DatePicker<T extends DateValue>({
         </Button>
         <DateInput className="flex h-10 w-full rounded-none border-none border-input bg-surface px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
           {(segment) => (
-            <DateSegment className="placeholder:opacity-50" segment={segment} />
+            <DateSegment className="rounded-sm focus:bg-primary-hover focus:text-base-300 caret-transparent placeholder-shown:italic" segment={segment} />
           )}
         </DateInput>
       </Group>

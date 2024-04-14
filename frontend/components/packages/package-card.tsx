@@ -1,7 +1,6 @@
-import { Booking } from "@/lib/api/bookings";
-import { addMinutes, format, isPast } from "date-fns";
-import { ButtonLink } from "../ui/button";
-import { BookingDeleteButton } from "./delete-button";
+import { Booking } from "@/lib/api/packages";
+import { addMinutes, format } from "date-fns";
+import { Button, ButtonLink } from "../ui/button";
 
 export function BookingCard({ booking }: { booking: Booking }) {
   return (
@@ -19,10 +18,10 @@ export function BookingCard({ booking }: { booking: Booking }) {
             {format(new Date(booking.date), "EEE',' dd MMM")}
           </p>
           <p className="text-base-500">
-            {format(booking.date, "h:mm a")} -{" "}
+            {format(new Date(booking.date), "h:mm a")} -{" "}
             {format(
               addMinutes(
-                booking.date,
+                new Date(booking.date),
                 booking.package.durationInMinutes,
               ),
               "h:mm a",
@@ -32,11 +31,11 @@ export function BookingCard({ booking }: { booking: Booking }) {
         <div className="flex flex-col my-auto">
           <div className="flex items-center rounded-md bg-primary text-[0.6rem] uppercase font-semibold tracking-wide text-on-primary bg-opacity-50 px-2 py-2">
             <div className="w-2 h-2 bg-success rounded-full mr-1"></div>
-            <span className="leading-none">{isPast(booking.date) ? "Completed" : "Upcoming"}</span>
+            <span className="leading-none">Upcoming</span>
           </div>
         </div>
         <div className="flex-1 flex justify-end space-x-2">
-          <BookingDeleteButton bookingID={booking.id} />
+          <Button variant="outline">Cancel Session</Button>
           <ButtonLink href={`bookings/${booking.id}`} variant="outline">
             Edit
           </ButtonLink>
@@ -45,3 +44,4 @@ export function BookingCard({ booking }: { booking: Booking }) {
     </div>
   );
 }
+

@@ -14,6 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { ButtonLink } from "../ui/button";
 
 type Customer = {
   firstName: string;
@@ -25,17 +26,25 @@ type Customer = {
 const columnHelper = createColumnHelper<Customer>();
 
 const columns = [
-  columnHelper.accessor("firstName", {
-    header: () => <span>First Name</span>,
-    cell: (row) => row.getValue(),
-  }),
-  columnHelper.accessor("lastName", {
-    header: () => <span>Last Name</span>,
-    cell: (row) => row.getValue(),
+  columnHelper.accessor(row => `${row.firstName} ${row.lastName}`, {
+    id: "fullName",
+    header: () => <span>Name</span>
   }),
   columnHelper.accessor("emailAddress", {
     header: () => <span>Email Address</span>,
     cell: (row) => <div className="">{row.getValue()}</div>,
+  }),
+  columnHelper.accessor("mobileNumber", {
+    header: () => <span>Mobile No</span>,
+    cell: (row) => row.getValue() ?? "Not Provided",
+  }),
+
+  columnHelper.accessor("mobileNumber", {
+    header: () => null,
+    cell: (row) => <div className="space-x-2 flex justify-end">
+      <ButtonLink variant="outline" href={`/customers/${row.id}`}>View Bookings</ButtonLink>
+      <ButtonLink variant="outline" href={`/customers/${row.id}/bookings`}>Edit</ButtonLink>
+    </div>,
   }),
 ];
 
@@ -60,9 +69,9 @@ export function CustomerTable({ data }: CustomerTableProps) {
                   {header.isPlaceholder
                     ? null
                     : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
                 </TableHead>
               ))}
             </TableRow>

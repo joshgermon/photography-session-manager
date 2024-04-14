@@ -1,10 +1,10 @@
 "use client";
 
-import { getBookings } from "@/lib/api/bookings";
+import { Booking, getBookings } from "@/lib/api/bookings";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { addMinutes, format } from "date-fns";
-import { formatTimeDifference } from "@/lib/utils";
+import { ButtonLink } from "../ui/button";
 
 export function UpcomingSessions() {
   const query = useQuery({ queryKey: ["bookings"], queryFn: getBookings });
@@ -16,15 +16,14 @@ export function UpcomingSessions() {
 
   return (
     <Card className="flex-grow">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">
+      <CardHeader>
+        <CardTitle>
           Your Upcoming Sessions
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-xs text-muted-foreground">+20.1% from last month</p>
-        <div className="flex flex-col space-y-2 mt-4">
-          {allBookings.map((booking) => (
+        <div className="flex flex-col space-y-2">
+          {allBookings.map((booking: Booking) => (
             <div
               key={booking.id}
               className="flex flex-col lg:flex-row py-2 text-sm space-x-4"
@@ -38,21 +37,21 @@ export function UpcomingSessions() {
 
               <div className="flex-1">
                 <p className="font-semibold">
-                  {format(new Date(booking.date), "EEE',' dd MMM")}
+                  {format(booking.date, "EEE',' dd MMM")}
                 </p>
                 <p className="text-base-500">
-                  {format(new Date(booking.date), "h:mm a")} -{" "}
+                  {format(booking.date, "h:mm a")} -{" "}
                   {format(
-                    addMinutes(
-                      new Date(booking.date),
-                      booking.package.durationInMinutes,
-                    ),
+                    addMinutes( booking.date, booking.package.durationInMinutes ),
                     "h:mm a",
                   )}
                 </p>
               </div>
             </div>
           ))}
+        </div>
+        <div className="pt-4">
+          <ButtonLink href="/bookings">View All Bookings</ButtonLink>
         </div>
       </CardContent>
     </Card>

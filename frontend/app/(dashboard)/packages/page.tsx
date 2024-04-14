@@ -1,44 +1,58 @@
 "use client";
 
+import { ButtonLink } from "@/components/ui/button";
+import { getSessionTypesAndPackages } from "@/lib/api/packages";
 import { useQuery } from "@tanstack/react-query";
-
-async function getOfferings() {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/offerings`,
-  );
-  const data = await res.json();
-  return data.data;
-}
+import { LuPackage } from "react-icons/lu";
 
 export default function Packages() {
-  const query = useQuery({ queryKey: ["offerings"], queryFn: getOfferings });
+  const query = useQuery({ queryKey: ["offerings"], queryFn: getSessionTypesAndPackages });
 
   if (query.isLoading) return "Loading...";
   if (query.error) return "An error has occurred: " + query.error.message;
 
-  const allOfferings = query.data;
+  const sessionTypes = query.data;
 
   return (
     <main className="flex flex-col space-y-6">
-      <div className="">
-        <div className="pb-5">
-          <h2 className="font-medium text-xl text-base">
-            Create your Packages
-          </h2>
-          <p className="text-base-300">
-            This is your list of packages and offerings where you can manage
-            them.
-          </p>
-        </div>
-        <div className="py-4 flex space-x-6">
-          {allOfferings.map((o) => (
-            <div className="w-full border border-base-900 px-4 py-4 rounded">
-              <h2 className="font-medium text-lg text-base">{o.name}</h2>
-              <p className="text-sm text-base-300">{o.description}</p>
+        <header className="flex justify-between items-center">
+          <div>
+            <h2 className="font-semibold text-lg text-base-200">
+              Manage Your Packages
+            </h2>
+            <p className="text-base-300 text-sm">
+              This is your list of bookings where you can manage them.
+            </p>
+          </div>
+        </header>
+        <div className="py-4 flex flex-col space-y-4 w-full">
+          {sessionTypes?.length ? sessionTypes.map((st) => (
+          <div className="rounded-lg border border-base-border bg-surface text-base w-full">
+            <div className="flex flex-col lg:flex-row px-5 py-5 space-x-4 text-sm">
+              <div className="flex-1 flex flex-col">
+                <p className="font-semibold text-base-200"> {st.name} </p>
+                <p className="text-base-500">{st.description}</p>
+              </div>
+
+              <div className="flex-1 flex justify-end space-x-2">
+                <ButtonLink href={`session-types/${st.id}`} variant="outline">
+                  Edit
+                </ButtonLink>
+              </div>
             </div>
-          ))}
+          </div>
+          )) :(
+          <div className="rounded-lg border border-base-border bg-surface text-base w-full px-4 py-10 flex justify-center">
+            <div className="text-center flex flex-col items-center space-y-4 justify-center">
+              <div className="bg-base-900 rounded-full w-fit p-3">
+                <LuPackage size={32} color="#333333"/>
+              </div>
+              <h3 className="font-semibold text-lg">You have no Session Types</h3>
+            <p className="text-base-300 text-sm">There are no session types created.<br/>You can create one above to begin.</p>
+            </div>
+          </div>
+          ) }
         </div>
-      </div>
     </main>
   );
 }

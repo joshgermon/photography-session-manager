@@ -11,7 +11,7 @@ import { NavLink } from "./ui/nav-link";
 
 export function Sidebar() {
   return (
-    <aside className="flex-none w-[14.5rem] px-4 py-8 h-full flex flex-col">
+    <aside className="flex-none w-[16rem] px-4 py-8 h-full flex flex-col">
       {/* Sidebar header */}
       <div className="px-2 pb-2">
         <h1 className="text-lg text-base font-semibold pt-1">Captura Books</h1>
@@ -20,7 +20,7 @@ export function Sidebar() {
       <nav className="flex flex-col py-6 space-y-2">
         <NavLink
           label="Dashboard"
-          href="/dash"
+          href="/"
           icon={<LuLayoutDashboard size={21} color="#212927" />}
         />
         <h2 className="text-sm font-medium pt-4 pb-1 px-3">Manage</h2>
