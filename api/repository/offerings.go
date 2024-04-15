@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -82,8 +81,6 @@ func (o *offeringRepository) GetAll(ctx context.Context) ([]OfferingWithPackages
 		err := rows.Scan(&row.SessionTypeId, &row.SessionTypeName, &row.SessionTypeDescription,
 			&row.SessionTypeCreatedAt, &row.PackageId, &row.PackageName, &row.DurationInMinutes,
 			&row.Price, &row.PackageCreatedAt)
-
-		fmt.Printf("%+v\n", row)
 
 		if err != nil {
 			return nil, err

@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -100,7 +99,6 @@ func (b *bookingRepository) GetAll(ctx context.Context) ([]BookingDetails, error
 
 		bookings = append(bookings, response)
 	}
-	fmt.Printf("%+v\n", bookings)
 	return bookings, nil
 }
 
