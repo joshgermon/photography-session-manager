@@ -59,6 +59,8 @@ func (s *server) Routes() *chi.Mux {
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
 
+
+	r.Post("/v1/auth/gcal", s.GetGoogleAccessToken)
 	r.Post("/v1/auth/login", s.LoginUser)
 	r.Get("/v1/auth/session", s.GetUserSession)
 

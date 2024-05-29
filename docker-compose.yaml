@@ -15,6 +15,7 @@ services:
     environment:
       - NODE_ENV=development
       - NEXT_PUBLIC_API_ENDPOINT=http://localhost:3333
+      - NEXT_PUBLIC_GOOGLE_CLIENT_ID=25395803902-a65gmvoheckh450mn0kpcvckqhbqqhsb.apps.googleusercontent.com
     networks:
       - app
 
@@ -26,6 +27,8 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:u!73bG2sanDaL8)d50ax@postgres:5432/development
       - PORT=3333
+      - GOOGLE_CLIENT_ID=25395803902-a65gmvoheckh450mn0kpcvckqhbqqhsb.apps.googleusercontent.com
+      - GOOGLE_CLIENT_SECRET=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
     volumes:
       - ./api/:/captura-books-api/
     depends_on:

@@ -4,8 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"time"
 )
 
@@ -83,4 +85,63 @@ func (s *server) GetUserSession(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Expired session", http.StatusUnauthorized)
 		return
   }
+}
+
+
+func (s *server) GetGoogleAccessToken(w http.ResponseWriter, r *http.Request) {
+  // Get the authorization code from the query parameters
+	code := r.URL.Query().Get("code")
+  fmt.Printf("code is: %s\n", code)
+	if code == "" {
+		http.Error(w, "Authorization code not found", http.StatusBadRequest)
+		return
+	}
+
+	// Exchange authorization code for access token
+	tokenURL := "https://oauth2.googleapis.com/token"
+
+	clientID := os.Getenv("GOOGLE_CLIENT_ID")
+	clientSecret := os.Getenv("GOOGLE_CLIENT_SECRET")
+  redirectURI := "http://localhost:3000/settings"
+
+	queryParams := url.Values{}
+	queryParams.Set("code", code)
+	queryParams.Set("client_id", clientID)
+	queryParams.Set("client_secret", clientSecret)
+	queryParams.Set("redirect_uri", redirectURI)
+	queryParams.Set("grant_type", "authorization_code")
+
+  url := fmt.Sprintf("%s?%s", tokenURL, queryParams.Encode())
+
+// Send POST request
+	resp, err := http.Post(url, "", nil)
+	if err != nil {
+		fmt.Println("Error sending request:", err)
+    http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer resp.Body.Close()
+  fmt.Println("Response status:", resp.Status)
+
+  	// Read response body
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error reading response:", err)
+		return
+	}
+
+  	// Define a struct to unmarshal the JSON response
+	var response map[string]interface{}
+
+	// Unmarshal JSON
+	err = json.Unmarshal(body, &response)
+	if err != nil {
+		fmt.Println("Error unmarshalling JSON:", err)
+		return
+	}
+
+	// Print the JSON response
+	fmt.Println("Response:", response)
+
+  return
 }

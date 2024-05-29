@@ -8,7 +8,7 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (props, ref) => {
-    const { type, className, ...otherProps } = props;
+    const { className, ...otherProps } = props;
 
     return (
       <RACInput
