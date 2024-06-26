@@ -25,7 +25,7 @@ export default function Bookings() {
         <BookingCreateForm />
       </header>
       <div className="flex space-x-2">
-        <Button className="bg-base-900">Upcoming</Button>
+        <Button className="bg-base-900 text-black">Upcoming</Button>
         <Button variant="ghost">Previous</Button>
         <Button variant="ghost">Canceled</Button>
       </div>

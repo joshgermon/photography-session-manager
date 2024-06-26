@@ -30,7 +30,7 @@ export function BookingCard({ booking }: { booking: Booking }) {
           </p>
         </div>
         <div className="flex flex-col my-auto">
-          <div className="flex items-center rounded-md bg-primary text-[0.6rem] uppercase font-semibold tracking-wide text-on-primary bg-opacity-50 px-2 py-2">
+          <div className="flex items-center rounded-md bg-grey-100 text-[0.6rem] uppercase font-semibold tracking-wide px-2 py-2">
             <div className="w-2 h-2 bg-success rounded-full mr-1"></div>
             <span className="leading-none">{isPast(booking.date) ? "Completed" : "Upcoming"}</span>
           </div>

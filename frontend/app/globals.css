@@ -7,6 +7,10 @@
         /* White */
         --color-white: 160, 1%, 100%;
 
+        /* Black */
+        --color-black-800: 180, 4%, 22%;
+        --color-black: 180, 5%, 16%;
+
         /* Mint */
         --color-mint-50: 150, 18%, 97%;
         --color-mint-100: 163, 33%, 96%;
@@ -88,10 +92,10 @@
 
     :root {
         /* Primary Color - Mint */
-        --primary: var(--color-mint);
+        --primary: var(--color-black);
         --primary-alt: var(--color-mint-400);
-        --on-primary: var(--color-forest);
-        --primary-hover: var(--color-mint-500);
+        --on-primary: var(--color-white);
+        --primary-hover: var(--color-black-800);
         --primary-active: var(--color-mint-700);
         --primary-disabled: var(--color-mint-400);
 
@@ -104,7 +108,7 @@
         --secondary-disabled: var(--color-forest-400);
 
         /* Secondary Colors - Gray */
-        --background: var(--color-mint-50);
+        --background: var(--color-gray-50);
         --background-alt: var(--color-gray-100);
         --background-muted: var(--color-gray-200);
 

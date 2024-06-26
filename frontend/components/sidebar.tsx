@@ -11,10 +11,13 @@ import { NavLink } from "./ui/nav-link";
 
 export function Sidebar() {
   return (
-    <aside className="flex-none w-[16rem] px-3 py-6 h-full flex flex-col">
-      {/* Sidebar header */}
-      <div className="px-2 pb-2">
-        <h1 className="text-lg text-base font-semibold pt-1">Captura Books</h1>
+    <aside className="flex-none w-[16rem] px-3 py-3 h-full flex flex-col">
+      <div className="rounded-md p-2 py-3 gap-3 shadow-sm flex bg-surface">
+        <div className="w-8 h-8 aspect-square rounded-[100%] bg-gray-200 dark:bg-slate-800 my-auto"></div>
+        <div>
+          <h4 className="text-sm font-medium">Angela & Josh Photgra..</h4>
+          <p className="text-xs text-muted-foreground/60">Pro Plan - 6 Days</p>
+        </div>
       </div>
       {/* Sidebar content */}
       <nav className="flex flex-col py-6 space-y-1">
@@ -46,13 +49,6 @@ export function Sidebar() {
           icon={<LuSettings size={18} color="#212927" />}
         />
       </nav>
-      <div className="mt-auto rounded-md p-2 py-4 gap-4 shadow-sm flex bg-surface">
-        <div className="w-10 h-10 aspect-square rounded-[100%] bg-primary dark:bg-slate-800 my-auto"></div>
-        <div>
-          <h4 className="text-sm font-medium">Angela & Josh ..</h4>
-          <p className="text-sm text-muted-foreground/60">Pro Plan</p>
-        </div>
-      </div>
     </aside>
   );
 }
