@@ -28,6 +28,7 @@ services:
       - PORT=3333
     volumes:
       - ./api/:/captura-books-api/
+      - /Users/joshuagermon/.aws:/root/.aws
     depends_on:
       - postgres
     networks:
